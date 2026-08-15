@@ -1,4 +1,4 @@
-﻿name: Deploy to GitHub Pages
+name: Deploy to GitHub Pages
 
 on:
   push:
@@ -36,8 +36,8 @@ jobs:
 
       - name: Build
         env:
-          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
-          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+          VITE_SUPABASE_URL: https://ubmevqisehmrstsccihs.supabase.co
+          VITE_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVibWV2cWlzZWhtcnN0c2NjaWhzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY3Mzk1MjYsImV4cCI6MjEwMjMxNTUyNn0.7eIwni_1JWLOBy3ww6r0wKIeKVqFhyJmG_MCeRCfhao
         run: npm run build
 
       - name: Setup Pages
