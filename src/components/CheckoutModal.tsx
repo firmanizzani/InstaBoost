@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { X, CheckCircle2, Loader2, ArrowRight, CreditCard, QrCode, Phone, Landmark, AlertCircle } from 'lucide-react';
+import { X, CheckCircle2, Loader2, ArrowRight, QrCode, Landmark, AlertCircle } from 'lucide-react';
 import type { CartItem } from '@/types';
 
 interface CheckoutModalProps {
@@ -95,11 +95,38 @@ export default function CheckoutModal({ open, items, onClose, onComplete }: Chec
     }, 2000);
   };
 
+  // Branded GoPay logo (teal pill badge style)
+  const GopayLogo = ({ active }: { active: boolean }) => (
+    <svg width="20" height="20" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+      <rect width="60" height="60" rx="12" fill={active ? '#00AED6' : '#374151'} />
+      <circle cx="30" cy="28" r="11" fill="white" fillOpacity="0.15" />
+      <path d="M30 19 C24.477 19 20 23.477 20 29 C20 34.523 24.477 39 30 39 C33.5 39 36.6 37.2 38.4 34.5 L34.2 34.5 C33.1 35.7 31.6 36.5 30 36.5 C25.858 36.5 22.5 33.142 22.5 29 C22.5 24.858 25.858 21.5 30 21.5 C32.8 21.5 35.2 23 36.6 25.2 L30 25.2 L30 27.7 L39.5 27.7 L39.5 29 C39.5 29.6 39.45 30.1 39.35 30.6 L41.8 30.6 C41.93 30.1 42 29.55 42 29 C42 23.477 37.523 19 30 19Z" fill="white"/>
+    </svg>
+  );
+
+  // Branded DANA logo (blue style)
+  const DanaLogo = ({ active }: { active: boolean }) => (
+    <svg width="20" height="20" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+      <rect width="60" height="60" rx="12" fill={active ? '#118EEA' : '#374151'} />
+      <text
+        x="50%"
+        y="52%"
+        dominantBaseline="middle"
+        textAnchor="middle"
+        fill="white"
+        fontSize="15"
+        fontWeight="800"
+        fontFamily="Arial Black, Arial, sans-serif"
+        letterSpacing="0.5"
+      >DANA</text>
+    </svg>
+  );
+
   const paymentOptions = [
-    { id: 'qris', label: 'QRIS / QR Code', icon: QrCode },
-    { id: 'gopay', label: 'GoPay', icon: Phone },
-    { id: 'dana', label: 'DANA', icon: Phone },
-    { id: 'bank', label: 'Transfer Bank', icon: Landmark },
+    { id: 'qris', label: 'QRIS / QR Code', icon: QrCode, customLogo: null },
+    { id: 'gopay', label: 'GoPay', icon: null, customLogo: GopayLogo },
+    { id: 'dana', label: 'DANA', icon: null, customLogo: DanaLogo },
+    { id: 'bank', label: 'Transfer Bank', icon: Landmark, customLogo: null },
   ];
 
   return (
@@ -186,6 +213,7 @@ export default function CheckoutModal({ open, items, onClose, onComplete }: Chec
                 <div className="grid grid-cols-2 gap-2">
                   {paymentOptions.map((opt) => {
                     const Icon = opt.icon;
+                    const CustomLogo = opt.customLogo;
                     return (
                       <button
                         key={opt.id}
@@ -197,7 +225,11 @@ export default function CheckoutModal({ open, items, onClose, onComplete }: Chec
                             : 'border-white/10 bg-white/5 text-slate-300 hover:bg-white/10'
                         }`}
                       >
-                        <Icon className={`h-4 w-4 ${payment === opt.id ? 'text-pink-400' : 'text-slate-400'}`} />
+                        {CustomLogo ? (
+                          <CustomLogo active={payment === opt.id} />
+                        ) : Icon ? (
+                          <Icon className={`h-4 w-4 ${payment === opt.id ? 'text-pink-400' : 'text-slate-400'}`} />
+                        ) : null}
                         {opt.label}
                       </button>
                     );
